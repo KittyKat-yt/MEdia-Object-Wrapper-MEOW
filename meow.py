@@ -37,13 +37,13 @@ class MEOW:
 
                     # 1 byte:  file name length
                     # x bytes: file name
-                    # 4 bytes: file size
+                    # 8 bytes: file size
                     # y bytes: file content
 
                     fileOut.write(littleNum(len(name) & 0xff, 1))
                     fileOut.write(name.encode("utf-8"))
 
-                    fileOut.write(littleNum(length & 0xffff_ffff, 4))
+                    fileOut.write(littleNum(length, 8))
                     fileOut.write(fileData.read())
 
             fileOut.write(littleNum(0x00, 1))
@@ -64,7 +64,7 @@ class MEOW:
                 fileNameLen = struct.unpack("<B", fileIn.read(1))[0]
                 if fileNameLen == 0x00:
                     break
-                fileName, fileLen = struct.unpack(f"<{fileNameLen}sI", fileIn.read(fileNameLen + 4))
+                fileName, fileLen = struct.unpack(f"<{fileNameLen}sQ", fileIn.read(fileNameLen + 8))
                 fileName = fileName.decode("utf-8")
                 with open(outPath + fileName, "xb") as fileOut:
                     fileOut.write(fileIn.read(fileLen))
