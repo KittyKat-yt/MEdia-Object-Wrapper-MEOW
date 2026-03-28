@@ -5,9 +5,6 @@ import shutil
 def littleNum(v: int, length: int) -> bytes:
     return v.to_bytes(length, "little", signed=False)
 
-def bigNum(v: int, length: int) -> bytes:
-    return v.to_bytes(length, "big", signed=False)
-
 def getFileName(path: str) -> str:
     return os.path.split(path)[1]
 
